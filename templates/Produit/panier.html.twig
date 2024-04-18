@@ -1,0 +1,28 @@
+{% extends 'front/base.html.twig' %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Panier</h2>
+        <div class="row">
+            {% for produitPanier in produitsPanier %}
+                <div class="col-md-6 offset-md-3">
+                    <div class="card mb-3">
+                        <div class="row g-0">
+                            <div class="col-md-4">
+                                <img src="{{ asset('produit/' ~ produitPanier.produit.image) }}" class="img-fluid rounded-start" alt="{{ produitPanier.produit.nom }}">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ produitPanier.produit.nom }}</h5>
+                                    <p class="card-text">{{ produitPanier.produit.description }}</p>
+                                    <p class="card-text">Prix: {{ produitPanier.produit.prix }}</p>
+                                    <a href="#" class="btn btn-danger">Supprimer du panier</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

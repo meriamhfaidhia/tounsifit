@@ -1,0 +1,53 @@
+{% extends 'back/base.html.twig' %}
+{% block body %}
+<link rel="stylesheet" href="{{ asset('/public/css/style.css') }}">
+
+    <div id="main">
+        <!-- Post -->
+        <section class="post">
+            <header class="major">
+                <h1>Modifier Produit</h1>
+            </header>
+
+            <div class="col-md-12">
+                {{ form_start(formB) }}
+                <fieldset>
+                    {{ form_row(formB.nom, {'attr': {'placeholder': 'Nom '}}) }}
+                </fieldset>
+            </div>
+
+            <div class="col-md-12">
+                <fieldset>
+                    {{ form_row(formB.description, {'attr': {'placeholder': 'Description'}}) }}
+                </fieldset>
+            </div>
+
+            <div class="col-md-12">
+                <fieldset>
+                    {{ form_row(formB.prix, {'attr': {'placeholder': 'Prix'}}) }}
+                </fieldset>
+            </div>
+
+            <div class="col-md-12">
+                <fieldset>
+                    {{ form_row(formB.quantity, {'attr': {'placeholder': 'Quantity'}}) }}
+                </fieldset>
+            </div>
+
+            <div class="col-md-12">
+                <fieldset>
+                    {{ form_row(formB.image, {'attr': {'placeholder': 'Image'}}) }}
+                </fieldset>
+            </div>
+
+            <div class="col-md-12">
+                <fieldset>
+                    <button type="submit" class="btn btn-success">Modifier !</button>
+                </fieldset>
+            </div>
+
+            {{ form_end(formB) }}
+
+        </section>
+    </div>
+{% endblock %}

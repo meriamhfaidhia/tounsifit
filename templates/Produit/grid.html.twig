@@ -1,0 +1,63 @@
+{% extends 'front/base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }} {# Inclure les fichiers CSS du template parent #}
+
+    <!-- Ajoutez ici les fichiers CSS spécifiques à votre grille de produits -->
+    <link href="front/img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500&family=Lora:wght@600;700&display=swap" rel="stylesheet"> 
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="{{ asset('front/lib/animate/animate.min.css')}}" rel="stylesheet">
+    <link href="{{ asset('front/lib/owlcarousel/assets/owl.carousel.min.css')}}" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="{{ asset('front/css/bootstrap.min.css')}}" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="{{ asset('front/css/style.css')}}" rel="stylesheet">    
+{% endblock %}
+
+{% block body %}
+    <!-- Contenu de votre grille de produits -->
+    <div class="container mt-5">
+        <div class="row justify-content-center"> {# Utilisez la classe justify-content-center de Bootstrap pour centrer le contenu horizontalement #}
+            <h2 class="text-center mb-4">Liste des Produits</h2> {# Ajoutez la classe text-center pour centrer le texte horizontalement #}
+        </div>
+        <div class="row g-4">
+            {% for produit in produits %}
+                <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="product-item">
+                        <div class="position-relative bg-light overflow-hidden">
+                            <img class="img-fluid w-100" src="{{ asset('produit/' ~ produit.image) }}" alt="{{ produit.nom }}">
+                            <div class="bg-secondary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">New</div>
+                        </div>
+                        <div class="text-center p-4">
+                            <a class="d-block h5 mb-2" href="#">{{ produit.nom }}</a>
+                            <span class="text-primary me-1">{{ produit.prix }}</span>
+                        </div>
+                        <div class="d-flex border-top">
+                            <small class="w-50 text-center border-end py-2">
+                             <a class="text-body" href="{{ path('product_details', {'id': produit.idproduit}) }}"><i class="fa fa-eye text-primary me-2"></i>Voir détails</a>
+                            </small>
+                            <small class="w-50 text-center py-2">
+
+                              <form action="{{ path('add_to_cart', {'id': produit.idproduit}) }}" method="post">
+                            <button type="submit" class="text-body btn btn-link"><i class="fa fa-shopping-bag text-primary me-2"></i>Ajouter au panier</button>
+                              </form>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

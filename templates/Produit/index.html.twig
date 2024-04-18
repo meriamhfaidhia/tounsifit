@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Produit ajoutée avec succées!{% endblock %}
+
+{% block body %}
+<link rel="stylesheet" href="{{ asset('/public/css/style.css') }}">
+
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+ 
+ <table border="1" align="center">
+        <thead>
+            <tr>
+                <th>id</th>
+                
+                <th>nom</th>
+
+                <th>description</th>
+
+                <th>quantity</th>
+
+                <th>prix</th>
+               
+                <th>image</th>
+
+          
+
+            </tr>
+        </thead>
+        <tbody>
+           {% for produit in produits %}
+              <tr>
+                            <td>{{ produit.idProduit }}</td>
+                            <td>{{ produit.nom }}</td>
+                            <td>{{ produit.description }}</td>
+                            <td>{{ produit.quantity }}</td>
+                            <td>{{ produit.prix }}</td>
+                            <td><img src=" {{ asset('produit/' ~ produit.image) }}" alt="{{ produit.nom }}" style="max-width: 100px;"></td>
+              </tr>
+          {% endfor %}
+
+           </tbody>
+        </table>
+
+</div>
+{% endblock %}
