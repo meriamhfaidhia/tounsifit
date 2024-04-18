@@ -12,36 +12,26 @@ class Panier
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: 'integer')]
     private ?int $idPanier;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id_produit", type="integer", nullable=false)
-     */
-    private $idProduit;
+    #[ORM\IdProduit]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $idproduit=null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="nom_produit", type="string", length=255, nullable=false)
-     */
-    private $nomProduit;
+    #[ORM\Column(length: 255)]
+    private ?string $nomproduit= null;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="prix_produit", type="integer", nullable=false)
-     */
-    private $prixProduit;
+    #[ORM\PrixProduit]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $prixproduit=null;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id_user", type="integer", nullable=false)
-     */
-    private $idUser;
+    #[ORM\IdUser]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $iduser=null;
 
     public function getIdPanier(): ?int
     {

@@ -275,3 +275,239 @@
     background: var(--dark);
     border-color: var(--primary);
 }
+
+
+
+/* Styles pour le formulaire d'ajout de produit */
+
+#main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.post {
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.post header.major {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.post h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.col-md-12 {
+    margin-bottom: 15px;
+}
+
+fieldset {
+    border: none;
+}
+
+/* Styles pour les champs de formulaire */
+
+input[type="text"],
+input[type="number"],
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+/* Styles pour le bouton Ajouter */
+
+.btn-success {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+}
+
+/* Styles pour la page de confirmation de l'ajout de produit */
+
+.example-wrapper {
+    margin: 1em auto;
+    max-width: 800px;
+    width: 95%;
+    font: 18px/1.5 sans-serif;
+}
+
+.example-wrapper code {
+    background: #F5F5F5;
+    padding: 2px 6px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid #ccc;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+img {
+    max-width: 100px;
+    height: auto;
+}
+
+/* Styles pour la liste des produits */
+
+.bg-light {
+    background-color: #f8f9fa !important; /* Change la couleur de fond en gris clair */
+}
+
+.rounded {
+    border-radius: 10px !important; /* Arrondit les coins des éléments */
+}
+
+.table-bordered {
+    border: 1px solid #dee2e6 !important; /* Ajoute une bordure autour du tableau */
+}
+
+.table-bordered th, .table-bordered td {
+    border: 1px solid #dee2e6 !important; /* Ajoute une bordure autour des cellules */
+}
+
+.btn-square {
+    width: 30px;
+    height: 30px;
+    border-radius: 5px; /* Donne aux boutons une forme carrée avec des coins arrondis */
+}
+
+.btn-warning {
+    background-color: #ffc107; /* Change la couleur de fond des boutons d'avertissement */
+    border-color: #ffc107; /* Change la couleur de la bordure des boutons d'avertissement */
+}
+
+.btn-danger {
+    background-color: #dc3545; /* Change la couleur de fond des boutons de danger */
+    border-color: #dc3545; /* Change la couleur de la bordure des boutons de danger */
+}
+
+.text-center {
+    text-align: center !important; /* Centre le texte */
+}
+
+.text-sm-start {
+    text-align: left !important; /* Aligne le texte à gauche pour les petits écrans */
+}
+
+.text-sm-end {
+    text-align: right !important; /* Aligne le texte à droite pour les petits écrans */
+}
+
+.pt-4 {
+    padding-top: 1rem !important; /* Ajoute de la marge en haut */
+}
+
+.px-4 {
+    padding-left: 1rem !important; /* Ajoute de la marge à gauche */
+    padding-right: 1rem !important; /* Ajoute de la marge à droite */
+}
+
+.py-2 {
+    padding-top: 0.5rem !important; /* Ajoute de la marge en haut et en bas */
+    padding-bottom: 0.5rem !important;
+}
+
+.container-fluid {
+    width: 100% !important; /* Utilise la largeur maximale disponible */
+}
+
+.pt-4 {
+    padding-top: 1rem !important; /* Ajoute de la marge en haut */
+}
+
+.rounded-top {
+    border-top-left-radius: 10px !important; /* Arrondit les coins supérieurs */
+    border-top-right-radius: 10px !important;
+}
+
+.p-4 {
+    padding: 1rem !important; /* Ajoute un remplissage uniforme */
+}
+
+.m-2 {
+    margin: 0.5rem !important; /* Ajoute une marge uniforme */
+}
+
+.text-center {
+    text-align: center !important; /* Centre le texte */
+}
+
+.border-bottom {
+    border-bottom: 1px solid #dee2e6 !important; /* Ajoute une bordure en bas */
+}
+/* Styles pour le formulaire de modification de produit */
+
+#main {
+    margin: 0 auto; /* Centre le contenu horizontalement */
+    max-width: 800px; /* Limite la largeur du contenu */
+    width: 95%; /* Utilise 95% de la largeur disponible */
+}
+
+.post {
+    padding: 20px; /* Ajoute de la marge intérieure */
+    background-color: #f8f9fa; /* Ajoute une couleur de fond */
+    border-radius: 10px; /* Arrondit les coins */
+}
+
+.major h1 {
+    margin-bottom: 20px; /* Ajoute de la marge en bas */
+    font-size: 24px; /* Définit la taille de police */
+}
+
+.col-md-12 {
+    margin-bottom: 20px; /* Ajoute de la marge en bas */
+}
+
+fieldset {
+    border: none; /* Supprime la bordure */
+}
+
+input[type="text"],
+textarea {
+    width: 100%; /* Utilise la largeur maximale disponible */
+    padding: 10px; /* Ajoute du remplissage */
+    border: 1px solid #ced4da; /* Ajoute une bordure */
+    border-radius: 5px; /* Arrondit les coins */
+}
+
+.btn-success {
+    background-color: #28a745; /* Change la couleur de fond du bouton de succès */
+    border-color: #28a745; /* Change la couleur de la bordure du bouton de succès */
+    color: #fff; /* Change la couleur du texte en blanc */
+    padding: 10px 20px; /* Ajoute du remplissage */
+    border-radius: 5px; /* Arrondit les coins */
+}
+
+.btn-success:hover {
+    background-color: #218838; /* Change la couleur de fond du bouton de succès au survol */
+    border-color: #1e7e34; /* Change la couleur de la bordure du bouton de succès au survol */
+}
