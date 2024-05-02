@@ -7,16 +7,22 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-use App\Repository\UserRepository;
-
-#[ORM\Entity(repositoryClass: UserRepository::class)]
-
+/**
+ * User
+ *
+ * @ORM\Table(name="user", uniqueConstraints={@ORM\UniqueConstraint(name="email", columns={"email"})})
+ * @ORM\Entity
+ */
 class User
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
 
     /**
      * @var string|null
@@ -70,24 +76,24 @@ class User
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="Allergie", inversedBy="user")
-     * @ORM\JoinTable(name="user_allergie",
+     * @ORM\ManyToMany(targetEntity="Panier", inversedBy="idUser")
+     * @ORM\JoinTable(name="panier_user",
      *   joinColumns={
-     *     @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     *     @ORM\JoinColumn(name="ID_User", referencedColumnName="id")
      *   },
      *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="allergie_id", referencedColumnName="id")
+     *     @ORM\JoinColumn(name="ID_Panier", referencedColumnName="id_panier")
      *   }
      * )
      */
-    private $allergie = array();
+    private $idPanier = array();
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->allergie = new ArrayCollection();
+        $this->idPanier = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function getId(): ?int
@@ -180,25 +186,25 @@ class User
     }
 
     /**
-     * @return Collection<int, Allergie>
+     * @return Collection<int, Panier>
      */
-    public function getAllergie(): Collection
+    public function getIdPanier(): Collection
     {
-        return $this->allergie;
+        return $this->idPanier;
     }
 
-    public function addAllergie(Allergie $allergie): static
+    public function addIdPanier(Panier $idPanier): static
     {
-        if (!$this->allergie->contains($allergie)) {
-            $this->allergie->add($allergie);
+        if (!$this->idPanier->contains($idPanier)) {
+            $this->idPanier->add($idPanier);
         }
 
         return $this;
     }
 
-    public function removeAllergie(Allergie $allergie): static
+    public function removeIdPanier(Panier $idPanier): static
     {
-        $this->allergie->removeElement($allergie);
+        $this->idPanier->removeElement($idPanier);
 
         return $this;
     }

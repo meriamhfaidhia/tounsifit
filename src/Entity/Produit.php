@@ -2,55 +2,92 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-use App\Repository\ProduitRepository;
-use Symfony\Component\Validator\Constraints as Assert; 
-
-
-#[ORM\Entity(repositoryClass: ProduitRepository::class)]
-
+/**
+ * Produit
+ *
+ * @ORM\Table(name="produit")
+ * @ORM\Entity
+ */
 class Produit
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $idProduit;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id_produit", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $idProduit;
 
-    #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message: "Le nom ne peut pas être vide")]
-    #[Assert\Length(
-        min: 6,
-        minMessage: "Le nom doit contenir au moins {{ limit }} caractères",
-        max: 255,
-        maxMessage: "Le nom ne peut pas dépasser {{ limit }} caractères"
-    )]
-    private ?string $nom= null;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nom", type="string", length=255, nullable=false)
+     */
+    private $nom;
 
-    #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message: "La description ne peut pas être vide")]
-    #[Assert\Length(
-        min: 6,
-        minMessage: "La description doit contenir au moins {{ limit }} caractères",
-        max: 255,
-        maxMessage: "La description ne peut pas dépasser {{ limit }} caractères"
-    )]
-    private ?string $description= null;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="string", length=255, nullable=false)
+     */
+    private $description;
 
-    #[ORM\Column]
-    #[Assert\NotBlank(message: "Le prix ne peut pas être vide")]
-    #[Assert\PositiveOrZero(message: "Le prix doit être un nombre positif ou nul")]
-    private ?int $prix= null;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="prix", type="integer", nullable=false)
+     */
+    private $prix;
 
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="Quantity", type="integer", nullable=false)
+     */
+    private $quantity;
 
-    #[ORM\Column]
-    #[Assert\NotBlank(message: "La quantité ne peut pas être vide")]
-    #[Assert\PositiveOrZero(message: "La quantité doit être un nombre positif ou nul")]
-    private ?int $quantity= null;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="image", type="string", length=255, nullable=false)
+     */
+    private $image;
 
-    #[ORM\Column(length: 255)]
-    private ?string $image= null;
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Allergie", mappedBy="produit")
+     */
+    private $allergie = array();
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Panier", inversedBy="idProduit")
+     * @ORM\JoinTable(name="produit_panier",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="ID_Produit", referencedColumnName="id_produit")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="ID_Panier", referencedColumnName="id_panier")
+     *   }
+     * )
+     */
+    private $idPanier = array();
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->allergie = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->idPanier = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     public function getIdProduit(): ?int
     {
@@ -117,5 +154,55 @@ class Produit
         return $this;
     }
 
+    /**
+     * @return Collection<int, Allergie>
+     */
+    public function getAllergie(): Collection
+    {
+        return $this->allergie;
+    }
+
+    public function addAllergie(Allergie $allergie): static
+    {
+        if (!$this->allergie->contains($allergie)) {
+            $this->allergie->add($allergie);
+            $allergie->addProduit($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAllergie(Allergie $allergie): static
+    {
+        if ($this->allergie->removeElement($allergie)) {
+            $allergie->removeProduit($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Panier>
+     */
+    public function getIdPanier(): Collection
+    {
+        return $this->idPanier;
+    }
+
+    public function addIdPanier(Panier $idPanier): static
+    {
+        if (!$this->idPanier->contains($idPanier)) {
+            $this->idPanier->add($idPanier);
+        }
+
+        return $this;
+    }
+
+    public function removeIdPanier(Panier $idPanier): static
+    {
+        $this->idPanier->removeElement($idPanier);
+
+        return $this;
+    }
 
 }

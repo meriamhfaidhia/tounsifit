@@ -2,52 +2,81 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-use App\Repository\PanierRepository;
-
-#[ORM\Entity(repositoryClass: PanierRepository::class)]
-
+/**
+ * Panier
+ *
+ * @ORM\Table(name="panier")
+ * @ORM\Entity
+ */
 class Panier
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private ?int $idPanier;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id_panier", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $idPanier;
 
-    #[ORM\IdProduit]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $idproduit=null;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nom_produit", type="string", length=255, nullable=false)
+     */
+    private $nomProduit;
 
-    #[ORM\Column(length: 255)]
-    private ?string $nomproduit= null;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="prix_produit", type="integer", nullable=false)
+     */
+    private $prixProduit;
 
-    #[ORM\PrixProduit]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $prixproduit=null;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="image", type="string", length=255, nullable=false)
+     */
+    private $image;
 
-    #[ORM\IdUser]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $iduser=null;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="quantity", type="integer")
+     */
+    private $quantity;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="User", mappedBy="idPanier")
+     */
+    private $idUser = array();
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Produit", mappedBy="idPanier")
+     */
+    private $idProduit = array();
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->idUser = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->idProduit = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     public function getIdPanier(): ?int
     {
         return $this->idPanier;
-    }
-
-    public function getIdProduit(): ?int
-    {
-        return $this->idProduit;
-    }
-
-    public function setIdProduit(int $idProduit): static
-    {
-        $this->idProduit = $idProduit;
-
-        return $this;
     }
 
     public function getNomProduit(): ?string
@@ -74,17 +103,82 @@ class Panier
         return $this;
     }
 
-    public function getIdUser(): ?int
+    public function getImage(): ?string
     {
-        return $this->idUser;
+        return $this->image;
     }
 
-    public function setIdUser(int $idUser): static
+    public function setImage(string $image): static
     {
-        $this->idUser = $idUser;
+        $this->image = $image;
 
         return $this;
     }
 
+    public function getQuantity(): ?int
+    {
+        return $this->quantity;
+    }
+
+    public function setQuantity(int $quantity): static
+    {
+        $this->quantity = $quantity;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getIdUser(): Collection
+    {
+        return $this->idUser;
+    }
+
+    public function addIdUser(User $idUser): static
+    {
+        if (!$this->idUser->contains($idUser)) {
+            $this->idUser->add($idUser);
+            $idUser->addIdPanier($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIdUser(User $idUser): static
+    {
+        if ($this->idUser->removeElement($idUser)) {
+            $idUser->removeIdPanier($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Produit>
+     */
+    public function getIdProduit(): Collection
+    {
+        return $this->idProduit;
+    }
+
+    public function addIdProduit(Produit $idProduit): static
+    {
+        if (!$this->idProduit->contains($idProduit)) {
+            $this->idProduit->add($idProduit);
+            $idProduit->addIdPanier($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIdProduit(Produit $idProduit): static
+    {
+        if ($this->idProduit->removeElement($idProduit)) {
+            $idProduit->removeIdPanier($this);
+        }
+
+        return $this;
+    }
 
 }

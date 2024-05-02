@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Shopping Cart</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link href="{{ asset('css/panier.css') }}" rel="stylesheet">
+</head>
+<body>
+    <main class="page">
+        <section class="shopping-cart dark">
+            <div class="container">
+                <div class="block-heading">
+                    <h2>Votre Panier</h2>
+                    <p></p>
+                </div>
+                <div class="content">
+                    <div class="row">
+                       <div class="col-md-12 col-lg-8">                            
+                        {% for element in elementsPanier %}
+    <div class="row border-top border-bottom">
+        <div class="row main align-items-center">
+            <div class="col-2"><img class="img-fluid" src="{{ asset('produit/' ~ element.image) }}"></div>
+            <div class="col">
+                <div class="row text-muted">{{ element.nomProduit }}</div>
+            </div>
+    <div class="col">
+    <button class="btn-plus" data-product-id="{{ element.idPanier }}" >+</button>
+    <button class="border quantity">{{ element.quantity }}</button>
+    <button class="btn-minus" data-product-id="{{ element.idPanier }}">-</button>
+</div>
+            <div class="col">{{ element.prixProduit }} TND</div>
+            <div class="col">
+                <form action="{{ path('supprimer_produit_panier', {'id': element.idPanier}) }}" method="post" class="d-inline delete-form">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button type="submit" class="btn btn-link"><i class="bi bi-trash"></i></button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+    {% endfor %}
+
+                        </div>
+                        <div class="col-md-4">
+                            <div class="summary">
+                                <h3>Summary</h3>
+<div class="summary-item"><span class="text">Totale</span><span class="price">{{ totalPanier }} TND</span></div>
+                                <button type="button" class="btn btn-primary btn-lg btn-block">Payer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="back-to-shop"><a href="{{ path('produit_grid') }}">&leftarrow;</a><span class="text-muted">Retourner au magasin</span></div>
+
+    </main>
+</body>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script>
+    $(document).ready(function(){
+        // Gestionnaire d'événements pour le bouton d'ajout
+        $('.btn-plus').click(function() {
+            var productId = $(this).data('product-id');
+            updateQuantity(productId, 'increase');
+        });
+
+        // Gestionnaire d'événements pour le bouton de soustraction
+        $('.btn-minus').click(function() {
+            var productId = $(this).data('product-id');
+            updateQuantity(productId, 'decrease');
+        });
+
+        function updateQuantity(productId, action) {
+            $.ajax({
+                url: "{{ path('update_quantity') }}",
+                method: "POST",
+                data: {
+                    productId: productId,
+                    action: action
+                },
+                success: function(response) {
+                    $('.quantity[data-product-id="' + productId + '"]').text(response.quantity);
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+    });
+    
+</script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</html>

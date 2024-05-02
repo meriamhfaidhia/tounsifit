@@ -6,42 +6,58 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-use App\Repository\AllergieRepository;
-
-#[ORM\Entity(repositoryClass: AllergieRepository::class)]
-
-
-
+/**
+ * Allergie
+ *
+ * @ORM\Table(name="allergie")
+ * @ORM\Entity
+ */
 class Allergie
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id=null;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
 
-   
-     
-     #[ORM\Column(length:255)]
-     
-    private ? string $nom ;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nom", type="string", length=255, nullable=false)
+     */
+    private $nom;
 
-   
-    #[ORM\Column(length:255)]
-    private ? string $description;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="string", length=255, nullable=false)
+     */
+    private $description;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="User", mappedBy="allergie")
+     * @ORM\ManyToMany(targetEntity="Produit", inversedBy="allergie")
+     * @ORM\JoinTable(name="allergie_produit",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="allergie_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="produit_id", referencedColumnName="id_produit")
+     *   }
+     * )
      */
-    private $user = array();
+    private $produit = array();
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->user = new ArrayCollection();
+        $this->produit = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function getId(): ?int
@@ -74,28 +90,25 @@ class Allergie
     }
 
     /**
-     * @return Collection<int, User>
+     * @return Collection<int, Produit>
      */
-    public function getUser(): Collection
+    public function getProduit(): Collection
     {
-        return $this->user;
+        return $this->produit;
     }
 
-    public function addUser(User $user): static
+    public function addProduit(Produit $produit): static
     {
-        if (!$this->user->contains($user)) {
-            $this->user->add($user);
-            $user->addAllergie($this);
+        if (!$this->produit->contains($produit)) {
+            $this->produit->add($produit);
         }
 
         return $this;
     }
 
-    public function removeUser(User $user): static
+    public function removeProduit(Produit $produit): static
     {
-        if ($this->user->removeElement($user)) {
-            $user->removeAllergie($this);
-        }
+        $this->produit->removeElement($produit);
 
         return $this;
     }

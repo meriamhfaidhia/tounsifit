@@ -15,7 +15,6 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 use App\Entity\Panier;
 
-
 /**
  * @Route("/produit")
  */
@@ -27,38 +26,37 @@ class ProduitController extends AbstractController
         return $this->render('Produit/index.html.twig', [
             'controller_name' => 'ProduitController',
         ]);
-    } 
-    
+    }
+
     #[Route('/new', name: 'produit_add', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, SessionInterface $session): Response
     {
         $produit = new Produit();
         $form = $this->createForm(ProduitType::class, $produit);
         $form->handleRequest($request);
-    
+
         if ($form->isSubmitted() && $form->isValid()) {
             $file = $form->get('image')->getData();
             $fileName = uniqid().'.'.$file->guessExtension();
             $file->move($this->getParameter('images_directorys'), $fileName);
             $produit->setImage($fileName);
-            
+
             $entityManager->persist($produit);
             $entityManager->flush();
-    
+
             // Ajouter le message flash de succès
             $session->getFlashBag()->add('success', 'Le produit a été ajouté avec succès.');
-    
+
             return $this->redirectToRoute('produit_show', ['id' => $produit->getIdProduit()]);
         }
-    
+
         // Affichage du formulaire
         return $this->renderForm('Produit/add.html.twig', [
             'produit' => $produit,
             'formB' => $form,
         ]);
     }
-    
-    
+
     /**
      * @Route("/delete/{id}", name="produit_delete")
      */
@@ -95,7 +93,7 @@ class ProduitController extends AbstractController
         $produit = $produitRepository->find($id);
         $form = $this->createForm(ProduitType::class, $produit);
         $form->handleRequest($request);
-    
+
         if ($form->isSubmitted() && $form->isValid()) {
             // Traitement de l'image
             $file = $form->get('image')->getData();
@@ -104,68 +102,98 @@ class ProduitController extends AbstractController
                 $file->move($this->getParameter('images_directorys'), $fileName);
                 $produit->setImage($fileName);
             }
-    
+
             $em = $doctrine->getManager();
             $em->persist($produit);
             $em->flush();
-    
+
             return $this->redirectToRoute('produit_show', ['id' => $produit->getIdProduit()]);
         }
-    
+
         return $this->render('Produit/update.html.twig', [
             'formB' => $form->createView(),
         ]);
     }
+
     /**
-    * @Route("/grid", name="produit_grid")
-    */
+     * @Route("/grid", name="produit_grid")
+     */
     public function showGrid(ProduitRepository $produitRepository): Response
     {
-     $produits = $produitRepository->findAll();
-     return $this->render('Produit/grid.html.twig', ['produits' => $produits]);
-      }
+        $produits = $produitRepository->findAll();
+        return $this->render('Produit/grid.html.twig', ['produits' => $produits]);
+    }
+
     /**
-    * @Route("/product/{id}", name="product_details")
-    */
+     * @Route("/product/{id}", name="product_details")
+     */
     public function productDetails($id, ProduitRepository $produitRepository): Response
-   {
-    $produit = $produitRepository->find($id);
+    {
+        $produit = $produitRepository->find($id);
 
-     return $this->render('Produit/details.html.twig', [
-        'produit' => $produit,
-     ]);
-   }
-   
+        return $this->render('Produit/details.html.twig', [
+            'produit' => $produit,
+        ]);
+    }
 
-   /**
- * @Route("/product/{id}", name="add_to_cart")
- */
- public function addToCart(Request $request, $id)
- {
-    $produit = $this->getDoctrine()->getRepository(Produit::class)->find($id);
+    /**
+     * @Route("/product/{id}", name="add_to_cart")
+     */
+    public function addToCart(Request $request, $id)
+    {
+        $produit = $this->getDoctrine()->getRepository(Produit::class)->find($id);
 
-    // Ici, vous ajoutez le produit au panier. Cela dépend de votre logique métier.
+        // Ici, vous ajoutez le produit au panier. Cela dépend de votre logique métier.
 
-    return $this->redirectToRoute('panier');
-}
+        return $this->redirectToRoute('panier');
+    }
+
+    /**
+     * @Route("/affiche-panier", name="affiche_panier")
+     */
+    public function afficherPanier()
+    {
+        // Récupérer les produits ajoutés au panier
+        // Implémentez cette logique en fonction de votre structure de base de données
+
+        // Exemple fictif :
+        $produitsPanier = $this->getDoctrine()->getRepository(ProduitPanier::class)->findAll();
+
+        // Passer les produits à votre template pour affichage
+        return $this->render('front/panier.html.twig', [
+            'produitsPanier' => $produitsPanier,
+        ]);
+    }
+
   /**
- * @Route("/product/{id}", name="affiche_to_panier")
+     * @Route("/search-by-letter/{letter}", name="produit_search_by_letter")
+     */
+    public function searchByLetter(string $letter, ProduitRepository $produitRepository): Response
+    {
+        $produits = $produitRepository->findByFirstLetter($letter);
+
+        return $this->render('Produit/search-by-letter.html.twig', [
+            'products' => $produits,
+            'selected_letter' => $letter,
+        ]);
+    }
+
+/**
+ * @Route("/search", name="produit_search", methods={"GET"})
  */
-
-public function afficherPanier()
+public function search(Request $request, ProduitRepository $produitRepository): Response
 {
-    // Récupérer les produits ajoutés au panier
-    // Implémentez cette logique en fonction de votre structure de base de données
+    $query = $request->query->get('query');
 
-    // Exemple fictif :
-    $produitsPanier = $this->getDoctrine()->getRepository(ProduitPanier::class)->findAll();
+    // Effectuez la recherche dans votre base de données en fonction du terme de recherche
+    $produits = $produitRepository->searchByQuery($query);
 
-    // Passer les produits à votre template pour affichage
-    return $this->render('front/panier.html.twig', [
-        'produitsPanier' => $produitsPanier,
+    // Passez les résultats de la recherche à votre template pour affichage
+    return $this->render('Produit/search-results.html.twig', [
+        'produits' => $produits,
+        'query' => $query,
     ]);
 }
 
-    
-    }
+}
 

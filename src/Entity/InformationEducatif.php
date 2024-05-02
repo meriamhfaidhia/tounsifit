@@ -2,39 +2,65 @@
 
 namespace App\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use App\Repository\InformationEducatifRepository;
 
-#[ORM\Entity(repositoryClass: InformationEducatifRepository::class)]
+/**
+ * InformationEducatif
+ *
+ * @ORM\Table(name="information_educatif", indexes={@ORM\Index(name="id_allergie", columns={"id_allergie"})})
+ * @ORM\Entity
+ */
 class InformationEducatif
 {
-  #[ORM\Id]
-  #[ORM\GeneratedValue]
-  #[ORM\Column]
-
-    private ?int $idinformation=null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $titre=null;
-
-   
-    #[ORM\Column(length: 255)]
-    private ?string  $contenu=null;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="idInformation", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $idinformation;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="auteur", type="string", length=255, nullable=false)
+     * @ORM\Column(name="titre", type="string", length=255, nullable=false)
      */
-    private $auteur;
+    private $titre;
 
     /**
-     * @var \App\Entity\Allergie
+     * @var string|null
      *
-     * @ORM\ManyToOne(targetEntity="Allergie")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_allergie", referencedColumnName="id")
-     * })
+     * @ORM\Column(name="symptome", type="string", length=255, nullable=true)
+     */
+    private $symptome;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="causes", type="text", length=65535, nullable=true)
+     */
+    private $causes;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="traitement", type="text", length=65535, nullable=true)
+     */
+    private $traitement;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="image", type="string", length=255, nullable=true)
+     */
+    private $image;
+
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="id_allergie", type="integer", nullable=true)
      */
     private $idAllergie;
 
@@ -55,36 +81,60 @@ class InformationEducatif
         return $this;
     }
 
-    public function getContenu(): ?string
+    public function getSymptome(): ?string
     {
-        return $this->contenu;
+        return $this->symptome;
     }
 
-    public function setContenu(string $contenu): static
+    public function setSymptome(?string $symptome): static
     {
-        $this->contenu = $contenu;
+        $this->symptome = $symptome;
 
         return $this;
     }
 
-    public function getAuteur(): ?string
+    public function getCauses(): ?string
     {
-        return $this->auteur;
+        return $this->causes;
     }
 
-    public function setAuteur(string $auteur): static
+    public function setCauses(?string $causes): static
     {
-        $this->auteur = $auteur;
+        $this->causes = $causes;
 
         return $this;
     }
 
-    public function getIdAllergie(): ?Allergie
+    public function getTraitement(): ?string
+    {
+        return $this->traitement;
+    }
+
+    public function setTraitement(?string $traitement): static
+    {
+        $this->traitement = $traitement;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): static
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    public function getIdAllergie(): ?int
     {
         return $this->idAllergie;
     }
 
-    public function setIdAllergie(?Allergie $idAllergie): static
+    public function setIdAllergie(?int $idAllergie): static
     {
         $this->idAllergie = $idAllergie;
 

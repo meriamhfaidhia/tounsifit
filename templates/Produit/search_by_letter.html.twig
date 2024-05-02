@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Products starting with "{{ selected_letter }}"{% endblock %}
+
+{% block body %}
+    <h1>Products Starting with "{{ selected_letter }}"</h1>
+    <ul>
+        {% for product in products %}
+            <li>{{ product.nom }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -58,23 +58,8 @@
 
 {% block body %}
     <!-- Contenu de votre grille de produits -->
-   <!-- Barre de recherche -->
-<div class="container mt-3 mb-4">
-    <form action="{{ path('produit_search') }}" method="GET">
-        <div class="input-group">
-            <input type="text" name="query" class="form-control" placeholder="Rechercher un produit...">
-            <button class="btn btn-outline-primary" type="submit">
-                <i class="fas fa-search"></i> <!-- Icône de loupe -->
-            </button>
-        </div>
-    </form>
-</div>
-
     <div class="container mt-5">
-        <div class="row justify-content-center"> {# Utilisez la classe justify-content-center de Bootstrap pour centrer le contenu horizontalement #}
-            <h2 class="text-center mb-4">Nos Produits</h2> {# Ajoutez la classe text-center pour centrer le texte horizontalement #}
-        </div>
-        <div class="row g-4">
+        <div class="row">
             {% for produit in produits %}
                 <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                     <div class="product-item">
@@ -104,43 +89,7 @@
             {% endfor %}
         </div>
     </div>
-
-    <!-- Include SweetAlert2 library -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    
-    <!-- Script to show notification on like icon click -->
-    <script>
-        document.querySelectorAll('.like-icon').forEach(function(likeIcon) {
-            let likeCount = 0; // Initialiser le compteur de like
-            likeIcon.addEventListener('click', function() {
-                likeCount++; // Incrémenter le compteur de like
-                // Mettre à jour le badge de compteur
-                likeIcon.querySelector('.like-count-badge').innerText = likeCount;
-                // Afficher la notification
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Like',
-                    text: 'Vous avez aimé ce produit!',
-                });
-            });
-        });
-
-        // Script to show notification on dislike icon click
-        document.querySelectorAll('.dislike-icon').forEach(function(dislikeIcon) {
-            let dislikeCount = 0; // Initialiser le compteur de dislike
-            dislikeIcon.addEventListener('click', function() {
-                dislikeCount++; // Incrémenter le compteur de dislike
-                // Mettre à jour le badge de compteur
-                dislikeIcon.querySelector('.dislike-count-badge').innerText = dislikeCount;
-                // Afficher la notification
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Dislike',
-                    text: 'Vous avez désaimé ce produit!',
-                });
-            });
-        });
-        
-        
-    </script>
+    <div class="container mt-3 mb-4 d-flex justify-content-end">
+        <a href="{{ path('produit_grid') }}" class="btn btn-primary">Précédent</a>
+    </div>
 {% endblock %}
