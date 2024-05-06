@@ -44,12 +44,13 @@ class Panier
      */
     private $image;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="quantity", type="integer")
-     */
-    private $quantity;
+   /**
+ * @var int
+ *
+ * @ORM\Column(name="quantity", type="integer", options={"default": 1})
+ */
+private $quantity = 1;
+
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -120,7 +121,7 @@ class Panier
         return $this->quantity;
     }
 
-    public function setQuantity(int $quantity): static
+    public function setQuantity(?int $quantity): static
     {
         $this->quantity = $quantity;
 

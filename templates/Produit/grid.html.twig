@@ -14,6 +14,9 @@
     <!-- Icon Font Stylesheet -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Ajoutez cette balise dans le <head> de votre fichier HTML de base -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+
 
     <!-- Libraries Stylesheet -->
     <link href="{{ asset('front/lib/animate/animate.min.css')}}" rel="stylesheet">
@@ -55,20 +58,19 @@
         }
     </style>
 {% endblock %}
-
 {% block body %}
     <!-- Contenu de votre grille de produits -->
-   <!-- Barre de recherche -->
-<div class="container mt-3 mb-4">
-    <form action="{{ path('produit_search') }}" method="GET">
-        <div class="input-group">
-            <input type="text" name="query" class="form-control" placeholder="Rechercher un produit...">
-            <button class="btn btn-outline-primary" type="submit">
-                <i class="fas fa-search"></i> <!-- Icône de loupe -->
-            </button>
-        </div>
-    </form>
-</div>
+    <!-- Barre de recherche -->
+    <div class="container mt-3 mb-4">
+        <form action="{{ path('produit_search') }}" method="GET">
+            <div class="input-group">
+                <input type="text" name="query" class="form-control" placeholder="Rechercher un produit...">
+                <button class="btn btn-outline-primary" type="submit">
+                    <i class="fas fa-search"></i> <!-- Icône de loupe -->
+                </button>
+            </div>
+        </form>
+    </div>
 
     <div class="container mt-5">
         <div class="row justify-content-center"> {# Utilisez la classe justify-content-center de Bootstrap pour centrer le contenu horizontalement #}
@@ -86,10 +88,15 @@
                             <span class="text-primary me-1">{{ produit.prix }}</span>
                         </div>
                         <div class="d-flex justify-content-between align-items-center border-top py-2">
-                            <div class="d-flex align-items-center">
-                                <a href="#" class="text-primary me-3 like-icon"><i class="fas fa-thumbs-up"></i> Like <span class="like-count-badge">0</span></a>
-                                <a href="#" class="text-danger me-3 dislike-icon"><i class="fas fa-thumbs-down"></i> Dislike <span class="dislike-count-badge">0</span></a>
-                            </div>
+                          
+                              {% for likeDislike in produit.likeDislike %}
+    <div class="d-flex align-items-center">
+        <a href="#" class="text-primary me-3 like-icon" data-produit-id="{{ produit.idProduit }}"><i class="bi bi-hand-thumbs-up"></i> <span class="like-count-badge">{{ likeDislike.likes }}</span></a>
+        <a href="#" class="text-danger me-3 dislike-icon" data-produit-id="{{ produit.idProduit }}"><i class="bi bi-hand-thumbs-down"></i> <span class="dislike-count-badge">{{ likeDislike.dislikes }}</span></a>
+    </div>
+{% endfor %}
+
+                            
                             <div>
                                 <a class="text-body me-3" href="{{ path('product_details', {'id': produit.idproduit}) }}"><i class="fa fa-eye text-primary me-2"></i>Voir détails</a>
                             </div>
@@ -108,39 +115,39 @@
     <!-- Include SweetAlert2 library -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     
-    <!-- Script to show notification on like icon click -->
     <script>
-        document.querySelectorAll('.like-icon').forEach(function(likeIcon) {
-            let likeCount = 0; // Initialiser le compteur de like
-            likeIcon.addEventListener('click', function() {
-                likeCount++; // Incrémenter le compteur de like
-                // Mettre à jour le badge de compteur
-                likeIcon.querySelector('.like-count-badge').innerText = likeCount;
-                // Afficher la notification
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Like',
-                    text: 'Vous avez aimé ce produit!',
-                });
-            });
-        });
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.like-icon').forEach(function(likeIcon) {
+                likeIcon.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    let productId = likeIcon.dataset.productId;
 
-        // Script to show notification on dislike icon click
-        document.querySelectorAll('.dislike-icon').forEach(function(dislikeIcon) {
-            let dislikeCount = 0; // Initialiser le compteur de dislike
-            dislikeIcon.addEventListener('click', function() {
-                dislikeCount++; // Incrémenter le compteur de dislike
-                // Mettre à jour le badge de compteur
-                dislikeIcon.querySelector('.dislike-count-badge').innerText = dislikeCount;
-                // Afficher la notification
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Dislike',
-                    text: 'Vous avez désaimé ce produit!',
+                    // Envoyer une requête AJAX pour liker le produit
+                    fetch('/like/' + productId, { method: 'POST' })
+                        .then(response => response.json())
+                        .then(data => {
+                            // Mettre à jour le badge de compteur avec le nombre de likes retourné
+                            likeIcon.querySelector('.like-count-badge').innerText = data.likes;
+                            // Afficher le message
+                            Swal.fire({
+                                title: 'Succès!',
+                                text: data.message,
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            });
+                        })
+                        .catch(error => {
+                            console.error('Erreur lors de la requête AJAX pour liker le produit :', error);
+                            // Gérer l'erreur
+                        });
                 });
             });
+
+            // Faire de même pour les dislikes
+            // ...
         });
-        
-        
     </script>
 {% endblock %}
+
+
+

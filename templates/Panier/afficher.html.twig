@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
+  
     <link href="{{ asset('css/panier.css') }}" rel="stylesheet">
 </head>
 <body>
@@ -35,10 +36,11 @@
 </div>
             <div class="col">{{ element.prixProduit }} TND</div>
             <div class="col">
-                <form action="{{ path('supprimer_produit_panier', {'id': element.idPanier}) }}" method="post" class="d-inline delete-form">
-                    <input type="hidden" name="_method" value="DELETE">
-                    <button type="submit" class="btn btn-link"><i class="bi bi-trash"></i></button>
-                </form>
+               <form action="{{ path('supprimer_produit_panier', {'id': element.idPanier}) }}" method="POST" class="d-inline delete-form">
+    <input type="hidden" name="_method" value="DELETE">
+    <button type="submit" class="btn btn-link"><i class="bi bi-trash"></i></button>
+</form>
+
             </div>
         </div>
 
@@ -50,8 +52,9 @@
                             <div class="summary">
                                 <h3>Summary</h3>
 <div class="summary-item"><span class="text">Totale</span><span class="price">{{ totalPanier }} TND</span></div>
-                                <button type="button" class="btn btn-primary btn-lg btn-block">Payer</button>
-                            </div>
+<form action="{{ path('checkout') }}" method="POST">
+                <button type="submit" class="btn btn-outline-success">Checkout</button>
+            </form>                            </div>
                         </div>
                     </div>
                 </div>
@@ -63,6 +66,28 @@
 </body>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script>
+$(document).ready(function(){
+    // Gestionnaire d'événements pour le formulaire de suppression
+    $('.delete-form').submit(function(event) {
+        event.preventDefault(); // Empêcher la soumission du formulaire par défaut
+
+        var form = $(this);
+        var url = form.attr('action');
+        
+        $.ajax({
+            url: url,
+            method: "DELETE",
+            success: function(response) {
+                // Actualiser la page ou supprimer l'élément du DOM
+                window.location.reload();
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
+});
+
     $(document).ready(function(){
         // Gestionnaire d'événements pour le bouton d'ajout
         $('.btn-plus').click(function() {

@@ -68,6 +68,13 @@ class Produit
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
+     * @ORM\ManyToMany(targetEntity="LikeDislike", mappedBy="produit")
+     */
+    private $likeDislike = array();
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
      * @ORM\ManyToMany(targetEntity="Panier", inversedBy="idProduit")
      * @ORM\JoinTable(name="produit_panier",
      *   joinColumns={
@@ -86,6 +93,7 @@ class Produit
     public function __construct()
     {
         $this->allergie = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->likeDislike = new \Doctrine\Common\Collections\ArrayCollection();
         $this->idPanier = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -176,6 +184,33 @@ class Produit
     {
         if ($this->allergie->removeElement($allergie)) {
             $allergie->removeProduit($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, LikeDislike>
+     */
+    public function getLikeDislike(): Collection
+    {
+        return $this->likeDislike;
+    }
+
+    public function addLikeDislike(LikeDislike $likeDislike): static
+    {
+        if (!$this->likeDislike->contains($likeDislike)) {
+            $this->likeDislike->add($likeDislike);
+            $likeDislike->addProduit($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLikeDislike(LikeDislike $likeDislike): static
+    {
+        if ($this->likeDislike->removeElement($likeDislike)) {
+            $likeDislike->removeProduit($this);
         }
 
         return $this;
