@@ -2,8 +2,4 @@
   #path: /
   #controller: App\Controller\DefaultController::index
 
-checkout:
-    path: /checkout
-    controller: App\Controller\PanierController::Checkout
-    methods: ['POST']
 

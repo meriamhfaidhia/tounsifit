@@ -143,6 +143,7 @@ public function updateQuantity(Request $request): Response
     // Retourner une réponse JSON avec la nouvelle quantité
     return new JsonResponse(['quantity' => $panier->getQuantity()]);
 }
+
 #[Route('/checkout', name: 'checkout', methods: ['POST'])]
     public function checkout(): Response
     {
@@ -176,7 +177,7 @@ public function updateQuantity(Request $request): Response
     public function successUrl(): Response
     {
         
-        return $this->render('payment/show.html.twig');
+        return $this->render('Paiement/success.html.twig');
     
     }
 
@@ -184,8 +185,15 @@ public function updateQuantity(Request $request): Response
     public function cancelUrl(): Response
     {
         
-        return $this->render('cancel.html.twig');
+        return $this->render('Paiement/cancel.html.twig');
         
     
     }
+
+
+        
+ 
+       
+
+    
 }
